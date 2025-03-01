@@ -21,20 +21,23 @@ ORVRM is a vehicle routing optimization system built in Rust that uses OSRM (Ope
 
 ### 1. Clone the repository
 
-```bashv
+```bash
 git clone https://github.com/maartenbode/orvrm.git
 cd orvrm
 ```
 
-### 2. Build the project
+### 2. Run the server
+
+The simplest way to build and run the project in development mode:
+
+```bash
+cargo run
+```
+
+For production use, build and run the optimized release version:
 
 ```bash
 cargo build --release
-```
-
-### 3. Run the server
-
-```bash
 ./target/release/orvrm
 ```
 
