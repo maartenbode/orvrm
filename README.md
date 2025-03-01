@@ -1,5 +1,7 @@
 # ORVRM - Open Source Rust Vehicle Route Machine
 
+[![Rust](https://github.com/maartenbode/orvrm/actions/workflows/rust.yml/badge.svg)](https://github.com/maartenbode/orvrm/actions/workflows/rust.yml)
+
 ORVRM is a vehicle routing optimization system built in Rust that uses OSRM (Open Source Routing Machine) for routing calculations. It provides a REST API for optimizing vehicle routes with various constraints.
 
 ## Features
