@@ -1,3 +1,5 @@
 /target
 .cursorrules
 test_api.sh
+osrm-data/
+.DS_Store
