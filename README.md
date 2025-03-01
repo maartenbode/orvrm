@@ -43,6 +43,40 @@ cargo build --release
 
 By default, the server will listen on `127.0.0.1:8080`.
 
+### 3. Using Docker
+
+ORVRM is available as a Docker image from GitHub Container Registry:
+
+```bash
+docker pull ghcr.io/maartenbode/orvrm:latest
+```
+
+Run ORVRM with Docker:
+
+```bash
+docker run -p 8080:8080 -e OSRM_URL=http://your-osrm-server:5000 ghcr.io/maartenbode/orvrm:latest
+```
+
+### 4. Using Docker Compose
+
+For convenience, a Docker Compose file is provided to run ORVRM together with OSRM:
+
+```bash
+# Download OSM data for your region (example for Europe)
+mkdir -p osrm-data
+wget -P osrm-data http://download.geofabrik.de/europe-latest.osm.pbf
+
+# Process the OSM data for OSRM (this may take a while)
+docker run -t -v "${PWD}/osrm-data:/data" osrm/osrm-backend:v5.27.1 osrm-extract -p /opt/car.lua /data/europe-latest.osm.pbf
+docker run -t -v "${PWD}/osrm-data:/data" osrm/osrm-backend:v5.27.1 osrm-partition /data/europe-latest.osrm
+docker run -t -v "${PWD}/osrm-data:/data" osrm/osrm-backend:v5.27.1 osrm-customize /data/europe-latest.osrm
+
+# Start the services
+docker-compose up -d
+```
+
+The ORVRM API will be available at http://localhost:8080.
+
 ## Configuration
 
 ORVRM can be configured using environment variables or configuration files. Create a `config` directory and add configuration files:

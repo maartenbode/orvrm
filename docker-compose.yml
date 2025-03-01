@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  orvrm:
+    image: ghcr.io/maartenbode/orvrm:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - OSRM_URL=http://osrm:5000
+    depends_on:
+      - osrm
+    restart: unless-stopped
+
+  osrm:
+    image: osrm/osrm-backend:v5.27.1
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./osrm-data:/data
+    command: "osrm-routed --algorithm mld /data/europe-latest.osrm"
+    restart: unless-stopped
