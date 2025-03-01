@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   orvrm:
     image: ghcr.io/maartenbode/orvrm:latest
@@ -12,10 +10,10 @@ services:
     restart: unless-stopped
 
   osrm:
-    image: osrm/osrm-backend:v5.27.1
+    image: osrm/osrm-backend:latest
     ports:
       - "5000:5000"
     volumes:
       - ./osrm-data:/data
-    command: "osrm-routed --algorithm mld /data/europe-latest.osrm"
+    command: "osrm-routed --algorithm mld /data/netherlands-latest.osrm"
     restart: unless-stopped
