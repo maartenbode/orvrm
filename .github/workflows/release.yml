@@ -1,0 +1,54 @@
+name: Create Release
+
+on:
+  workflow_run:
+    workflows: ["Rust"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Build Release Binary
+        run: cargo build --release
+
+      - name: Get Current Version
+        id: get_version
+        run: echo "version=$(grep '^version =' Cargo.toml | sed 's/version = \"\(.*\)\"/\1/')" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: Release v${{ steps.get_version.outputs.version }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            target/release/orvrm
+            LICENSE
+            README.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Display Release URL
+        run: echo "Release created at ${{ steps.create_release.outputs.url }}"
