@@ -40,13 +40,19 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libssl-dev pkg-config gcc-aarch64-linux-gnu
+          # Install cross-compilation dependencies for OpenSSL
+          sudo apt-get install -y crossbuild-essential-arm64 pkg-config-aarch64-linux-gnu
 
       - name: Build x86_64 Release Binary
         run: cargo build --release --target x86_64-unknown-linux-gnu
 
       - name: Build ARM Release Binary
         run: |
+          # Set up environment variables for cross-compilation with OpenSSL
+          PKG_CONFIG_ALLOW_CROSS=1 \
+          OPENSSL_DIR=/usr/include/aarch64-linux-gnu \
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc \
+          PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig \
           cargo build --release --target aarch64-unknown-linux-gnu
 
       - name: Get Current Version
