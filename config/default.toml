@@ -1,0 +1,13 @@
+[server]
+host = "127.0.0.1"
+port = 8080
+workers = 4
+
+[osrm]
+base_url = "http://localhost:5050"
+default_profile = "car"
+timeout_seconds = 30
+
+[routing]
+default_max_time = 30
+default_threads = 4 
